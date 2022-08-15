@@ -23,11 +23,9 @@ runs:
 
             # Support pro & core build
             if [ "${{ inputs.REPO_NAME }}" == "elementor-pro" ]; then
-              echo "Building pro plugin"
               rm -rf ../elementor
               git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
             fi
-
       
             sed -i -E "s/Stable tag: .*/Stable tag: ${{ inputs.PACKAGE_VERSION }}/g" ./readme.txt
             sed -i -E "s/Version: .*/Version: ${{ inputs.PACKAGE_VERSION }}/g" ${{ inputs.REPO_NAME }}.php
@@ -40,6 +38,7 @@ runs:
                 mv build elementor
                 zip -r $PLUGIN_ZIP_FILENAME elementor
                 echo "PLUGIN_ZIP_FILENAME=${PLUGIN_ZIP_FILENAME}" >> $GITHUB_ENV
+                echo "PLUGIN_ZIP_PATH=${{ github.workspace }}/elementor/**/*" >> $GITHUB_ENV
                 echo "PLUGIN_ZIP_FILENAME=${PLUGIN_ZIP_FILENAME}"
             else
                 PACKAGE_BASE_DIR="/tmp/elementor-pro-releases/"
