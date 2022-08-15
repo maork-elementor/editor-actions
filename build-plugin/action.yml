@@ -20,6 +20,13 @@ runs:
                 echo "PACKAGE_VERSION is empty string or undefined"
                 exit 1
             fi
+
+            # Support pro & core build
+            if [ $module_file_name == "elementor-pro" ]; then
+              rm -rf ../elementor
+              git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
+            fi
+
             module_file_name=$(echo "${{ inputs.REPO_NAME }}" | tr '[:upper:]' '[:lower:]')
             sed -i -E "s/Stable tag: .*/Stable tag: ${{ inputs.PACKAGE_VERSION }}/g" ./readme.txt
             sed -i -E "s/Version: .*/Version: ${{ inputs.PACKAGE_VERSION }}/g" $module_file_name.php
@@ -27,6 +34,7 @@ runs:
             PLUGIN_ZIP_FILENAME="elementor-${{ inputs.PACKAGE_VERSION }}.zip"
             npx grunt build
 
+            # Support pro & core build
             if [ $module_file_name == "elementor" ]; then
                 mv build elementor
                 zip -r $PLUGIN_ZIP_FILENAME elementor
