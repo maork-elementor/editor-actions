@@ -134,6 +134,8 @@ jobs:
           files: elementor-*.zip
           prerelease: ${{ github.event.client_payload.pre_release }}
           body_path: temp-changelog.txt
+          repository: ${{ github.event.client_payload.repository}}
+          token: ${{ secrets.MAINTAIN_TOKEN }}
         env:
           GITHUB_TOKEN: ${{ secrets.MAINTAIN_TOKEN }}
       - name: Send slack message
