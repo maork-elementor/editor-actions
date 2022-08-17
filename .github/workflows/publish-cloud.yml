@@ -92,7 +92,7 @@ jobs:
           echo $(git rev-parse HEAD)
           echo "CURRENT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
       - name: Validate Run Checks
-        uses : ./validate-run-checks
+        uses : maork-elementor/editor-actions/validate-run-checks@master
         with:
           TOKEN: ${{ secrets.MAINTAIN_TOKEN }}
           REPOSITORY: ${{ github.event.client_payload.repository}}
