@@ -22,13 +22,13 @@ runs:
             fi
 
             #remove owner from repo name
-            REPO_NAME="${{{ inputs.REPO_NAME }}}"
+            REPO_NAME="${{ inputs.REPO_NAME }}"
             REPO_NAME="${REPO_NAME#*/}"
             REPO_NAME="${REPO_NAME%%/*}"
-            #echo "REPO_NAME: ${REPO_NAME}"
+            echo "REPO_NAME: ${REPO_NAME}"
 
             # Support pro & core build
-            if [ "{$REPO_NAME}" == "elementor-pro" ]; then
+            if [ "${REPO_NAME}" == "elementor-pro" ]; then
               rm -rf ../elementor
               git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
             fi
