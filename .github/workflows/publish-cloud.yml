@@ -54,7 +54,7 @@ jobs:
           INPUT_VERSION: ${{ github.event.client_payload.version }}
       - name: Bump version
         id: bump_version_step
-        uses: ./bump-version
+        uses: maork-elementor/editor-actions/bump-version@master
         with:
           CHANNEL: "cloud"
       - name: Push version
