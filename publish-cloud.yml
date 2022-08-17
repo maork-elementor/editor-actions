@@ -3,6 +3,7 @@ name: Publish Cloud
 
 on: 
   workflow_dispatch:
+    types: [deploy-cloud]
     inputs:
       version:
         type: string
