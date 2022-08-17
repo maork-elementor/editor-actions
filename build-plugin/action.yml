@@ -21,23 +21,26 @@ runs:
                 exit 1
             fi
 
+            #remove owner from repo name
+            REPO_NAME="${{{ inputs.REPO_NAME }}}"
+            REPO_NAME="${REPO_NAME#*/}"
+            REPO_NAME="${REPO_NAME%%/*}"
+            #echo "REPO_NAME: ${REPO_NAME}"
+
             # Support pro & core build
-            if [ "${{ inputs.REPO_NAME }}" == "elementor-pro" ]; then
+            if [ "{$REPO_NAME}" == "elementor-pro" ]; then
               rm -rf ../elementor
               git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
             fi
 
-            echo "PWD --> $(pwd)"
-            echo "(ls -la)" $(ls -la)
-
             sed -i -E "s/Stable tag: .*/Stable tag: ${{ inputs.PACKAGE_VERSION }}/g" ./readme.txt
-            sed -i -E "s/Version: .*/Version: ${{ inputs.PACKAGE_VERSION }}/g" ${{ inputs.REPO_NAME }}.php
-            sed -i -E "s/ELEMENTOR_VERSION', '.*'/ELEMENTOR_VERSION', '${{ inputs.PACKAGE_VERSION }}'/g" ${{ inputs.REPO_NAME }}.php
+            sed -i -E "s/Version: .*/Version: ${{ inputs.PACKAGE_VERSION }}/g" ${REPO_NAME}.php
+            sed -i -E "s/ELEMENTOR_VERSION', '.*'/ELEMENTOR_VERSION', '${{ inputs.PACKAGE_VERSION }}'/g" ${REPO_NAME}.php
             PLUGIN_ZIP_FILENAME="elementor-${{ inputs.PACKAGE_VERSION }}.zip"
             npx grunt build
 
             # Support pro & core build
-            if [ "${{ inputs.REPO_NAME }}" == "elementor" ]; then
+            if [ "${REPO_NAME}" == "elementor" ]; then
                 mv build elementor
                 zip -r $PLUGIN_ZIP_FILENAME elementor
                 echo "PLUGIN_ZIP_FILENAME=${PLUGIN_ZIP_FILENAME}" >> $GITHUB_ENV
