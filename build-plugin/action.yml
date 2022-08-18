@@ -42,10 +42,11 @@ runs:
             else
                 rm -rf ../elementor
                 git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
-                sed -i -E "s/Version: .*/Version: ${PACKAGE_VERSION}/g" ./${REPO_NAME}.php
-                sed -i -E "s/ELEMENTOR_PRO_VERSION', '.*'/ELEMENTOR_PRO_VERSION', '${PACKAGE_VERSION}'/g" ./${REPO_NAME}.php
+                sed -i -E "s/Version: .*/Version: ${{ inputs.PACKAGE_VERSION }}/g" ./${REPO_NAME}.php
+                sed -i -E "s/ELEMENTOR_PRO_VERSION', '.*'/ELEMENTOR_PRO_VERSION', '${{ inputs.PACKAGE_VERSION }}'/g" ./${REPO_NAME}.php
                 sed -i -E "s/\$elementor_version_required = '.*?'/\$elementor_version_required = '${ELEMENTOR_VERSION_DEPENDENCY}'/g" ./${REPO_NAME}.php
                 sed -i -E "s/\$elementor_version_recommendation = '.*?'/\$elementor_version_recommendation = '${ELEMENTOR_VERSION_RECOMMENDATION}'/g" ./${REPO_NAME}.php
+                PLUGIN_ZIP_FILENAME="elementor-pro-${{ inputs.PACKAGE_VERSION }}.zip"
                 npx grunt build
                 PACKAGE_BASE_DIR="/tmp/elementor-pro-releases/"
                 PACKAGE_PATH=$(ls $PACKAGE_BASE_DIR)
