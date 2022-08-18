@@ -42,12 +42,11 @@ runs:
             else
                 rm -rf ../elementor
                 git clone --single-branch --branch master https://github.com/elementor/elementor.git ../elementor
-                PACKAGE_VERSION=$(node -p "require('./package.json').last_cloud_version")
-                ELEMENTOR_VERSION_DEPENDENCY=$(node -p "require('./package.json').elementor_version_dependency")
-                ELEMENTOR_VERSION_RECOMMENDATION=$(node -p "require('./package.json').elementor_version_recommendation")
-                echo "PACKAGE_VERSION=${PACKAGE_VERSION}" >> $GITHUB_ENV
-                echo "ELEMENTOR_VERSION_DEPENDENCY=${ELEMENTOR_VERSION_DEPENDENCY}" >> $GITHUB_ENV
-                echo "ELEMENTOR_VERSION_RECOMMENDATION=${ELEMENTOR_VERSION_RECOMMENDATION}" >> $GITHUB_ENV
+                sed -i -E "s/Version: .*/Version: ${PACKAGE_VERSION}/g" ./${REPO_NAME}.php
+                sed -i -E "s/ELEMENTOR_PRO_VERSION', '.*'/ELEMENTOR_PRO_VERSION', '${PACKAGE_VERSION}'/g" ./${REPO_NAME}.php
+                sed -i -E "s/\$elementor_version_required = '.*?'/\$elementor_version_required = '${ELEMENTOR_VERSION_DEPENDENCY}'/g" ./${REPO_NAME}.php
+                sed -i -E "s/\$elementor_version_recommendation = '.*?'/\$elementor_version_recommendation = '${ELEMENTOR_VERSION_RECOMMENDATION}'/g" ./${REPO_NAME}.php
+                npx grunt build
                 PACKAGE_BASE_DIR="/tmp/elementor-pro-releases/"
                 PACKAGE_PATH=$(ls $PACKAGE_BASE_DIR)
                 echo "PACKAGE_PATH --> $PACKAGE_PATH"
